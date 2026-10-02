@@ -35,6 +35,14 @@ class ExternalAuthLoginPage extends Page implements ILoginBasePage
         return $this->GetQuerystring(QueryStringKeys::TYPE);
     }
 
+    /**
+     * @return string|false|null
+     */
+    public function GetAuthorizationCode()
+    {
+        return filter_input(INPUT_GET, 'code', FILTER_UNSAFE_RAW);
+    }
+
     public function ShowError($messages)
     {
         $this->Set('Errors', $messages);

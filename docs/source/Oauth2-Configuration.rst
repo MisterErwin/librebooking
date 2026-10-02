@@ -75,3 +75,44 @@ To hide the internal LibreBooking login prompt, also set:
            ],
        ],
    ];
+
+Oauth2 Groups
+^^^^^^^^^^^^^
+
+By default, LibreBooking does not fetch groups from OAuth2.
+By providing the name of a claim via the ``oauth2.groups.claim`` configuration
+option, the groups of a user are set on register.
+See below for how to synchronize groups on each login.
+The ``oauth2.scope`` configuration option allows to configure additional scopes
+for requesting the group memberships (group memberships are non-standard).
+This only works with the oauth2 provider, not with other providers.
+
+.. code-block:: php
+
+   return [
+       'settings' => [
+           'authentication' => [
+                // ...
+               'oauth2.scope' => 'openid email profile groups',
+               'oauth2.groups.claim' => 'groups',
+           ],
+       ],
+   ];
+
+Sync On Login
+^^^^^^^^^^^^^
+
+By default, LibreBooking only sets the user's attributes once on sign up and does not synchronize data after each login.
+If the option ``oauth2.sync.on.login`` is set to ``true``, the update occurs on each login.
+This only works with the oauth2 provider, not with other providers.
+
+.. code-block:: php
+
+   return [
+       'settings' => [
+           'authentication' => [
+                // ...
+               'oauth2.sync.on.login' => true,
+           ],
+       ],
+   ];

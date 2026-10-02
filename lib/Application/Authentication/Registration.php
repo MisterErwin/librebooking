@@ -149,7 +149,7 @@ class Registration implements IRegistration
             $command = new UpdateUserFromLdapCommand($user->UserName(), $user->Email(), $user->FirstName(), $user->LastName(), $password, $salt, $user->Phone(), $user->Organization(), $user->Title());
             ServiceLocator::GetDatabase()->Execute($command);
 
-            if ($this->GetUserGroups($user) != null) {
+            if ($this->GetUserGroups($user) !== null) {
                 $updatedUser = $this->userRepository->LoadByUsername($user->Username());
                 $updatedUser->ChangeGroups($this->GetUserGroups($user));
                 $this->userRepository->Update($updatedUser);
@@ -181,7 +181,13 @@ class Registration implements IRegistration
     {
         $userGroups = $user->GetGroups();
 
+        if ($userGroups === []) {
+            // Special case: Empty groups list leads to empty array
+            return [];
+        }
+
         if (empty($userGroups)) {
+            // If otherwise empty -> null skips the sync
             return null;
         }
 

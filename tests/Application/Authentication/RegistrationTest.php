@@ -391,5 +391,11 @@ class RegistrationTest extends TestBase
         $this->assertEquals(2, count($userGroups));
         $this->assertEquals(new UserGroup(1, 'Group1'), $userGroups[0]);
         $this->assertEquals(new UserGroup(3, 'Group3'), $userGroups[1]);
+
+        // Test setting groups to the empty array
+        $user = new AuthenticatedUser($username, $email, '', '', 'password', '', '', '', '', '', []);
+        $registration->Synchronize($user);
+        $userGroups = $userRepository->_AddedUser->Groups();
+        $this->assertEquals([], $userGroups);
     }
 }
